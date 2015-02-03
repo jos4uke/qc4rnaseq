@@ -95,6 +95,37 @@ if (is.installed('rmarkdown'))
   suppressPackageStartupMessages(library('rmarkdown'));
 }
 
+### ggplot2
+if (is.installed('ggplot2'))
+{
+  suppressPackageStartupMessages(require('ggplot2'));
+} else
+{
+  install.packages('ggplot2');
+  suppressPackageStartupMessages(library('ggplot2'));
+}
+
+### dendextend
+if (is.installed('dendextend'))
+{
+  suppressPackageStartupMessages(require('dendextend'));
+} else
+{
+  install.packages('dendextend');
+  suppressPackageStartupMessages(library('dendextend'));
+}
+
+### FactoMineR
+if (is.installed('FactoMineR'))
+{
+  suppressPackageStartupMessages(require('FactoMineR'));
+} else
+{
+  install.packages('FactoMineR');
+  suppressPackageStartupMessages(library('FactoMineR'));
+}
+
+
 ###
 ### FUNCTIONS ###
 ###
@@ -121,7 +152,7 @@ tryCatch.W.E <- function(expr)
 loadCountData <- function(file)
 {
   # load count data
-  warn_err <- tryCatch.W.E(read.table(opt$count, header=TRUE, sep="\t"))
+  warn_err <- tryCatch.W.E(read.table(opt$count, header=TRUE, sep="\t", check.names=FALSE))
   
   if (is.null(warn_err$warning) && is.null(warn_err$value$message))
   {
@@ -158,27 +189,47 @@ isCountDataBBRIC <- function(count.df)
   colNames <- names(count.df)
   if (length(colNames)>8) {
     debug(logger, "Count input file have more than 8 columns, count format seems to be BBRIC")
-    # check for bbric format: check .count and .rpkm for 2 first columns pairs (a minimum to compare)
+
+    # check for bbric format
     if (length(colNames)>=12) {
       debug(logger, "Count input file have at least 12 columns, a minimum of 2 samples to compare")
-      debug(logger, "Will check for BBRIC count format: check .count and .rpkm name extension for 2 first columns pairs")
-      is_count <- grepl("\\.count$", colNames[c(9,11)])
+      debug(logger, "Will check for BBRIC count format: check -count and -rpkm name extension for 2 first columns pairs")
+   # check for bbric format: check -count and -rpkm for odd and even columns pairs 
+	is_count <- grepl("\\-count$", colNames[seq(9, length(colNames), by=2)])
       if (all(is_count)) { 
-        debug(logger, "The 2 first columns pairs have .count columns") 
+        debug(logger, "The odd columns pairs have -count columns") 
       } else
       {
-        debug(logger, "Missing .count column in any of the 2 first columns pairs")
-      }
-      
-      is_rpkm <- grepl("\\.rpkm$", colNames[c(10,12)])
+        debug(logger, "Missing -count column in any of the odd columns pairs")
+      }    
+    is_rpkm <- grepl("\\-rpkm$", colNames[seq(10, length(colNames), by=2)])
       if (all(is_rpkm)) { 
-        debug(logger, "The 2 first columns pairs have .rpkm columns") 
+        debug(logger, "The even columns pairs have -rpkm columns") 
       } else
       {
-        debug(logger, "Missing .rpkm column in any of the 2 first columns pairs")
+        debug(logger, "Missing -rpkm column in any of the even columns pairs")
       }
-      
-      if (all(is_count, is_rpkm)) {
+ 
+    # check for bbric format: check -count and -rpkm columns have the same lib name
+	is_idem <- gsub("-count", "", colNames[seq(9, length(colNames), by=2)]) == gsub("-rpkm", "", colNames[seq(10, length(colNames), by=2)])
+      if (all(is_idem)) { 
+        debug(logger, "The -count and -rpkm columns have the same lib name") 
+      } else
+      {
+        debug(logger, "All the -count and -rpkm columns don't have the same lib name")
+      }	  
+
+    # check for bbric format: check -count and -rpkm columns contain only numeric values  
+	  is_num <- c()
+		for (i in 9:length(colNames)) { is_num <- append(is.numeric(count.df[,i]), is_num)}
+     if (all(is_num)) { 
+        debug(logger, "-count and -rpkm columns contain only numeric values") 
+      } else
+      {
+        debug(logger, "Values not numeric are found in the -count and -rpkm columns")
+      }
+	 
+      if (all(is_count, is_rpkm, is_idem, is_num)) {
         is_bbric_format = TRUE
         info(logger, "OK Count input file format is BBRIC")
         is_bbric_format
@@ -208,14 +259,18 @@ isCountDataGeneric <- function(count.df)
     debug(logger, "Count input file have at least 3 columns, a minimum of 2 samples to compare")
     debug(logger, "Will check for generic count format: check that 2nd and 3rd columns values are numric vectors")
     #if (all(count.df[,2] == floor(count.df[,2])) && all(count.df[,3] == floor(count.df[,3]))) {
-    if (all(is.numeric(count.df[,2])) && all(is.numeric(count.df[,3]))) {
-      is_generic_format = TRUE
-      debug(logger, "Generic format: all 2nd and 3rd columns values are numeric vectors")
-      info(logger, "OK Count input file format is generic")
-      is_generic_format
+
+    #if (all(is.numeric(count.df[,2])) && all(is.numeric(count.df[,3]))) {
+	is_num <- c()
+	for (i in 2:length(colNames)) { is_num <- append(is.numeric(count.df[,i]), is_num)}
+	if (all(is_num)) {
+		is_generic_format = TRUE
+		debug(logger, "Generic format: 2nd and all following columns values are numeric vectors")
+		info(logger, "OK Count input file format is generic")
+		is_generic_format
     } else {
       is_generic_format = FALSE
-      debug(logger, "Not a generic format: all or any of the 2nd and 3rd columns values are not numeric vectors")
+      debug(logger, "Not a generic format: all or any of the 2nd and following columns values are not numeric vectors")
       info(logger, "Count input file format is not generic")
       is_generic_format
     }
@@ -254,7 +309,148 @@ isCountDataFormat <- function(count.df, format)
 }
 
 
+###
+### Load Stats data
+###
+loadStatsData <- function(file)
+{
+  # load Stats data
+  warn_err <- tryCatch.W.E(read.table(opt$stats, header=TRUE, sep="\t", check.names=FALSE))
+  
+  if (is.null(warn_err$warning) && is.null(warn_err$value$message))
+  {
+    stats.df <- warn_err$value
+    debug(logger, paste("input stats data dimensions: ", dim(stats.df)[1], " x ", dim(stats.df)[2], sep=""))
+    StatscolNames <- names(stats.df)
+  } else {
+    stop(paste(geterrmessage(), str(warn_err)))
+  }
+  stats.df
+}
+
+###
+### Check Stats data format
+###
+
+isStatsDataFormat <- function(stats.df)
+{
+  StatscolNames <- names(stats.df)
+  if (length(StatscolNames) == 7) {
+    debug(logger, "Stats input file has 7 columns as expected")
+    # check for stats format: check the StatscolNames
+	TrueStatscolNames <- c("lib", "specific_hits", "mapping_hits",	"raw_reads/pairs_count", "mapped_reads/pairs_count", "feature_overlapping_hits", "feature_overlapping_hits/specific_hits_percent" )
+	if (identical(StatscolNames, TrueStatscolNames)) {
+		debug(logger, "Stats input file has the expected column names")
+		info(logger, "OK Stats input file format is OK")
+		is_stats_format = TRUE
+		is_stats_format
+		} else
+		{
+		debug(logger, "Stats input file doesnt' have the expected column names")
+		info(logger, "Stats input file doesnt' have the expected column names")
+		is_stats_format = FALSE
+		is_stats_format
+		}
+	} else {
+		error(logger, "Stats input file doesn't have 7 columns as expected")
+		stop("Stats input file doesn't have 7 columns as expected")
+	}
+}
+	
+
+###
+### Load Design data
+###	
+loadDesignData <- function(file)
+{
+  # load Design data
+  warn_err <- tryCatch.W.E(read.table(opt$design, header=TRUE, sep="\t", check.names=FALSE))
+  
+  if (is.null(warn_err$warning) && is.null(warn_err$value$message))
+  {
+    design.df <- warn_err$value
+    debug(logger, paste("input design data dimensions: ", dim(design.df)[1], " x ", dim(design.df)[2], sep=""))
+  } else {
+    stop(paste(geterrmessage(), str(warn_err)))
+  }
+  design.df
+}	
+	
+	
+###
+### Check Design data format
+###
+
+isDesignDataFormat <- function(design.df)
+{
+  DesigncolNames <- names(design.df)
+  if (length(DesigncolNames) == 2) {
+    debug(logger, "Design input file has 2 columns as expected")
+	is_design_format = TRUE
+	is_design_format
+  } else
+  {
+	is_design_format = FALSE
+	is_design_format
+	error(logger, "Design input file doesn't have 2 columns as expected")
+	stop("Design input file doesn't have 2 columns as expected")
+   }
+}
 
 
+##
+## Check count data and design data consistency (same lib names)
+##
+
+isCountDesign <- function(count.df, design.df, format)
+{
+	colNames <- names(count.df)
+	# Take the lib_names from count data
+	if (format == "BBRIC") {
+		countlibNames <- gsub("-count", "", colNames[seq(9, length(colNames), by=2)])
+	} else if (format == "generic") {
+		countlibNames <- colNames[2:length(colNames)]
+	}
+	# Take the lib_names from design data
+	designlibNames <- design.df[,1]
+	# Compare both count and design lib names
+	if (all(countlibNames == designlibNames)){
+		debug(logger, "Count and design data have the same lib names")
+		info(logger, "OK Count and design data have the same lib names")
+		is_count_design = TRUE
+		is_count_design
+		} else
+		{
+		debug(logger, "Count and design data don't have the same lib names")
+		info(logger, "Count and design data don't have the same lib names")
+		is_count_design = FALSE
+		is_count_design
+		}
+}
+
+##
+## Check stats data and design data consistency (same lib names)
+##
+	
+isStatsDesign <- function(stats.df, design.df)
+{
+	# Take the lib_names from stats data
+	statslibNames <- stats.df[,1]
+	# Take the lib_names from design data
+	designlibNames <- design.df[,1]
+	# Compare both stats and design lib names
+	if (identical(statslibNames, designlibNames)) {
+		debug(logger, "Stats and design data have the same lib names")
+		info(logger, "OK Stats and design data have the same lib names")
+		is_stats_design = TRUE
+		is_stats_design
+		} else
+		{
+		debug(logger, "Stats and design data don't have the same lib names")
+		info(logger, "Stats and design data don't have the same lib names")
+		is_stats_design = FALSE
+		is_stats_design
+		}	
+}
 
 
