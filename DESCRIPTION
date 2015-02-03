@@ -6,4 +6,4 @@ Date: 2015-02-03
 Author: Joseph Tran
 Maintainer: Joseph Tran <Joseph.Tran@versailles.inra.fr>
 Description: Estimate a posteriori the quality of RNA-seq libraries using count data
-License: GPL-2
+License:  GPL (>= 2)
