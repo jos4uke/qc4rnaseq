@@ -3,7 +3,23 @@ Type: Package
 Title: Estimate a posteriori the quality of RNA-seq libraries using count data
 Version: 1.0
 Date: 2015-02-03
-Author: Joseph Tran
+Authors@R: c(
+  person("Joseph", "Tran", email = "Joseph.Tran@versailles.inra.fr", role = c("aut", "cre")),
+  person("Adeline", "Simon", email = "Adeline.Simon@versailles.inra.fr", role = "aut"))
 Maintainer: Joseph Tran <Joseph.Tran@versailles.inra.fr>
 Description: Estimate a posteriori the quality of RNA-seq libraries using count data
+Depends: R (>= 3.0.2)
+Imports:
+  log4r,
+  knitr,
+  markdown,
+  rmarkdown,
+  ggplot2,
+  dendextend,
+  FactoMineR
+Suggests:
+  testthat
+LazyData: true
+URL: https://github.com/jos4uke/qc4rnaseq
+BugReports: https://github.com/jos4uke/qc4rnaseq/issues
 License:  GPL (>= 2)
