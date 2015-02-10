@@ -233,25 +233,27 @@ isStatsDataFormat <- function(stats.df)
 {
   StatscolNames <- names(stats.df)
   if (length(StatscolNames) == 7) {
-    debug(logger, "Stats input file has 7 columns as expected")
+#     debug(logger, "Stats input file has 7 columns as expected")
     # check for stats format: check the StatscolNames
-	TrueStatscolNames <- c("lib", "specific_hits", "mapping_hits",	"raw_reads/pairs_count", "mapped_reads/pairs_count", "feature_overlapping_hits", "feature_overlapping_hits/specific_hits_percent" )
-	if (identical(StatscolNames, TrueStatscolNames)) {
-		debug(logger, "Stats input file has the expected column names")
-		info(logger, "OK Stats input file format is OK")
-		is_stats_format = TRUE
-		is_stats_format
-		} else
-		{
-		debug(logger, "Stats input file doesnt' have the expected column names")
-		info(logger, "Stats input file doesnt' have the expected column names")
-		is_stats_format = FALSE
-		is_stats_format
-		}
-	} else {
-		error(logger, "Stats input file doesn't have 7 columns as expected")
-		stop("Stats input file doesn't have 7 columns as expected")
-	}
+    TrueStatscolNames <- c("lib", "specific_hits", "mapping_hits",	"raw_reads/pairs_count", "mapped_reads/pairs_count", "feature_overlapping_hits", "feature_overlapping_hits/specific_hits_percent" )
+    if (identical(StatscolNames, TrueStatscolNames)) {
+#       debug(logger, "Stats input file has the expected column names")
+#       info(logger, "OK Stats input file format is OK")
+      is_stats_format = TRUE
+      is_stats_format
+    } else
+    {
+#       debug(logger, "Stats input file doesnt' have the expected column names")
+#       info(logger, "Stats input file doesnt' have the expected column names")
+      is_stats_format = FALSE
+      is_stats_format
+    }
+  } else {
+#     error(logger, "Stats input file doesn't have 7 columns as expected")
+#     stop("Stats input file doesn't have 7 columns as expected")
+    is_stats_format = FALSE
+    is_stats_format
+  }
 }
 	
 
