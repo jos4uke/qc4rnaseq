@@ -1,0 +1,145 @@
+---
+title: "QC_RNASeq_BBRIC_count"
+output: 
+  pdf_document:
+    toc: true
+    highlight: zenburn    
+---
+
+<!--- ajout d'un saut de page apres le toc --->
+\newpage
+
+```{r echo=FALSE}
+
+
+# treatment of count BBRIC file
+bbric.df <- read.table(opt$count, header = TRUE, sep="\t")
+nbcoltotal=dim(bbric.df)[2]
+nblib=(nbcoltotal - 8)/2
+rawvalues = bbric.df[, seq(9, nbcoltotal, by=2)]
+colnames(rawvalues) = gsub("-count", "", colnames(rawvalues)) 
+rpkmvalues = bbric.df[, seq(10, nbcoltotal, by=2)]
+colnames(rpkmvalues) = gsub("-rpkm", "", colnames(rpkmvalues)) 
+lograwvalues <- log(rawvalues + 1)
+logrpkmvalues <- log(rpkmvalues + 1)
+
+# treatment of design file
+if (!is.null(opt$design)) {
+	design.df <- read.table(opt$design, header=TRUE, sep="\t")
+	lib_names <- design.df[,1]
+	Factor = design.df[,2]
+	moda_names = unique (Factor)
+	testcol  <- colorRampPalette(c('blue','red', 'green', 'orange'))
+	colmoda <- testcol(length(moda_names))
+	colorModa <- c()
+	for (i in 1:length(moda_names)) {
+		moda = moda_names[i]
+		colorModa[moda]=colmoda[i]
+	}
+	colorLib <- c()
+	for (i in 1:length(lib_names)) {
+		lib = lib_names[i]
+		moda = Factor[i]
+		collib = colorModa[moda]
+		colorLib[lib]=collib
+	}
+}
+
+```
+
+Cluster dendrogram representing the hierarchical clustering of libraries (log raw values)
+==========================================================================================
+```{r echo=FALSE}
+dist.lame.cor <- 1 - cor(lograwvalues, use="pairwise.complete.obs")
+hc.lame.cor <- hclust(as.dist(dist.lame.cor))
+dendCol <- as.dendrogram(hc.lame.cor)
+
+if (!is.null(opt$design)) {
+	labels_colors(dendCol) <- colorModa[Factor][order.dendrogram(dendCol)]
+}
+plot(dendCol, main= "Cluster Dendrogram (log raw values)")
+```
+
+Cluster dendrogram representing the hierarchical clustering of libraries (log rpkm values)
+==========================================================================================
+```{r echo=FALSE}
+dist.lame.cor <- 1 - cor(logrpkmvalues, use="pairwise.complete.obs")
+hc.lame.cor <- hclust(as.dist(dist.lame.cor))
+dendCol <- as.dendrogram(hc.lame.cor)
+
+if (!is.null(opt$design)) {
+	labels_colors(dendCol) <- colorModa[Factor][order.dendrogram(dendCol)]
+}
+plot(dendCol, main= "Cluster Dendrogram (log rpkm values)")
+```
+
+PCA (Principal component analysis) of the libraries (log raw values)
+===================================================================
+```{r echo=FALSE}
+acpnnlog = PCA(t(lograwvalues), scale.unit=FALSE, graph= FALSE)
+plot(acpnnlog, axes=c(1,2), choix=c("ind"), title = "Individuals factor map (PCA) (log raw values)")
+```
+
+PCA (Principal component analysis) of the libraries (log rpkm values)
+=====================================================================
+```{r echo=FALSE}
+acpnnlog = PCA(t(logrpkmvalues), scale.unit=FALSE, graph= FALSE)
+plot(acpnnlog, axes=c(1,2), choix=c("ind"), title = "Individuals factor map (PCA) (log rpkm values)")
+```
+
+Barplot representing for each library the number of features (genes / RNA) that have at least 10 reads mapped
+==============================================================================================================
+```{r echo=FALSE}
+vecteursup10 = c()
+vecteurunionprov = c()
+vecteurall = c()
+for (colo in 1:nblib) { vecteursup10 <- append(vecteursup10, length(which(rawvalues[,colo]>9)))}
+for (colo in 1:nblib) { vecteurunionprov <- append(vecteurunionprov, which(rawvalues[,colo]>9))}
+vecteurunion = unique(vecteurunionprov)
+vecteursup10 <- append(vecteursup10, length(vecteurunion))
+for (colo in 1:(nblib+1)) { vecteurall <- append(vecteurall, length(rawvalues[,1]))}
+
+if (!is.null(opt$design)) {
+	barplot(vecteursup10, names.arg=c(colnames(rawvalues[1:nblib]), "At least in 1 lib"), las=2, cex.names=0.7, col=c(colorLib, "black"), ylim=c(0,max(vecteurall)))
+} else {
+	barplot(vecteursup10, names.arg=c(colnames(rawvalues[1:nblib]), "At least in 1 lib"), las=2, cex.names=0.7, ylim=c(0,max(vecteurall)))
+}
+
+todisplay = data.frame(c(colnames(rawvalues[1:nblib]), "At least in 1 lib"),vecteursup10, vecteurall)
+names(todisplay) = c('lib', 'nb features with at least 10 reads', 'nb features total')
+todisplay[,1:3]
+
+```
+
+Box-plot (log raw values)
+=========================
+```{r echo=FALSE}
+if (!is.null(opt$design)) {
+	boxplot(lograwvalues, las=2, cex.axis=0.7, main="BoxPlot of log (raw counts)", col=colorLib)
+} else {
+	boxplot(lograwvalues, las=2, cex.axis=0.7, main="BoxPlot of log (raw counts)")
+}
+```
+
+Box-plot (log rpkm values)
+============================
+```{r echo=FALSE}
+if (!is.null(opt$design)) {
+	boxplot(logrpkmvalues, las=2, cex.axis=0.7, main="BoxPlot of log (rpkm counts)", col=colorLib)
+} else {
+	boxplot(logrpkmvalues, las=2, cex.axis=0.7, main="BoxPlot of log (rpkm counts)")
+}
+```
+
+Summary of raw values
+============================
+
+```{r echo=FALSE}
+summary(rawvalues)
+```
+
+Summary of rpkm values
+============================
+```{r echo=FALSE}
+summary(rpkmvalues)
+```
