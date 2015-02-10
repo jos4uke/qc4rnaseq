@@ -10,125 +10,22 @@
 ##
 ## @description: This R library contains functions for running RNASeq Quality Control (QC) on gene count dataset and mapping statistics (BBRIC). 
 ##
-## @copyright: Copyright (c) 2015 by Joseph Tran. This work is made available under the terms of the Creative Commons Attribution-ShareAlike 3.0 license, http://creativecommons.org/licenses/by-sa/3.0/.
+## @license: GPL (>= 2)
 ##
 ###############################################
 
 version <- "0.0.1.0"
 
-copyright <- "Copyright (c) 2015 by Joseph Tran. This work is made available under the terms of the Creative Commons Attribution-ShareAlike 3.0 license, http://creativecommons.org/licenses/by-sa/3.0/."
-
-###
-### Dependencies ###
-###
-
-### check for installed package
-is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1])
-
-### testthat
-if (is.installed('testthat'))
-{
-  suppressPackageStartupMessages(require('testthat'));
-} else
-{
-  install.packages('testthat');
-  suppressPackageStartupMessages(library('testthat'));
-}
-
-### log4r
-if (is.installed('log4r'))
-{
-  suppressPackageStartupMessages(require('log4r'));
-} else
-{
-  install.packages('log4r');
-  suppressPackageStartupMessages(library('log4r'));
-}
-
-### getopt
-if (is.installed('getopt'))
-{
-  suppressPackageStartupMessages(require('getopt'));
-} else
-{
-  install.packages('getopt');
-  suppressPackageStartupMessages(library('getopt'));
-}
-
-### optparse
-if (is.installed('optparse'))
-{
-  suppressPackageStartupMessages(require('optparse'));
-} else
-{
-  install.packages('optparse');
-  suppressPackageStartupMessages(library('optparse'));
-}
-
-### knitr
-if (is.installed('knitr'))
-{
-  suppressPackageStartupMessages(require('knitr'));
-} else
-{
-  install.packages('knitr');
-  suppressPackageStartupMessages(library('knitr'));
-}
-
-### markdown
-if (is.installed('markdown'))
-{
-  suppressPackageStartupMessages(require('markdown'));
-} else
-{
-  install.packages('markdown');
-  suppressPackageStartupMessages(library('markdown'));
-}
-
-### rmarkdown
-if (is.installed('rmarkdown'))
-{
-  suppressPackageStartupMessages(require('rmarkdown'));
-} else
-{
-  install.packages('rmarkdown');
-  suppressPackageStartupMessages(library('rmarkdown'));
-}
-
-### ggplot2
-if (is.installed('ggplot2'))
-{
-  suppressPackageStartupMessages(require('ggplot2'));
-} else
-{
-  install.packages('ggplot2');
-  suppressPackageStartupMessages(library('ggplot2'));
-}
-
-### dendextend
-if (is.installed('dendextend'))
-{
-  suppressPackageStartupMessages(require('dendextend'));
-} else
-{
-  install.packages('dendextend');
-  suppressPackageStartupMessages(library('dendextend'));
-}
-
-### FactoMineR
-if (is.installed('FactoMineR'))
-{
-  suppressPackageStartupMessages(require('FactoMineR'));
-} else
-{
-  install.packages('FactoMineR');
-  suppressPackageStartupMessages(library('FactoMineR'));
-}
-
+copyright <- "GPL (>= 2)"
 
 ###
 ### FUNCTIONS ###
 ###
+
+###
+### check for installed package
+###
+is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1])
 
 ###
 ### Capturing warnings/errors
