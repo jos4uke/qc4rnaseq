@@ -310,28 +310,28 @@ isDesignDataFormat <- function(design.df)
 
 isCountDesign <- function(count.df, design.df, format)
 {
-	colNames <- names(count.df)
-	# Take the lib_names from count data
-	if (format == "BBRIC") {
-		countlibNames <- gsub("-count", "", colNames[seq(9, length(colNames), by=2)])
-	} else if (format == "generic") {
-		countlibNames <- colNames[2:length(colNames)]
-	}
-	# Take the lib_names from design data
-	designlibNames <- design.df[,1]
-	# Compare both count and design lib names
-	if (all(countlibNames == designlibNames)){
-		debug(logger, "Count and design data have the same lib names")
-		info(logger, "OK Count and design data have the same lib names")
-		is_count_design = TRUE
-		is_count_design
-		} else
-		{
-		debug(logger, "Count and design data don't have the same lib names")
-		info(logger, "Count and design data don't have the same lib names")
-		is_count_design = FALSE
-		is_count_design
-		}
+  colNames <- names(count.df)
+  # Take the lib_names from count data
+  if (format == "BBRIC") {
+    countlibNames <- gsub("-count", "", colNames[seq(9, length(colNames), by=2)])
+  } else if (format == "generic") {
+    countlibNames <- colNames[2:length(colNames)]
+  }
+  # Take the lib_names from design data
+  designlibNames <- design.df[,1]
+  # Compare both count and design lib names
+  if (all(countlibNames == designlibNames)){
+#     debug(logger, "Count and design data have the same lib names")
+#     info(logger, "OK Count and design data have the same lib names")
+    is_count_design = TRUE
+    is_count_design
+  } else
+  {
+#     debug(logger, "Count and design data don't have the same lib names")
+#     info(logger, "Count and design data don't have the same lib names")
+    is_count_design = FALSE
+    is_count_design
+  }
 }
 
 ##
