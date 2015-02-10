@@ -212,12 +212,12 @@ isCountDataFormat <- function(count.df, format)
 loadStatsData <- function(file)
 {
   # load Stats data
-  warn_err <- tryCatch.W.E(read.table(opt$stats, header=TRUE, sep="\t", check.names=FALSE))
+  warn_err <- tryCatch.W.E(read.table(file, header=TRUE, sep="\t", check.names=FALSE))
   
   if (is.null(warn_err$warning) && is.null(warn_err$value$message))
   {
     stats.df <- warn_err$value
-    debug(logger, paste("input stats data dimensions: ", dim(stats.df)[1], " x ", dim(stats.df)[2], sep=""))
+#     debug(logger, paste("input stats data dimensions: ", dim(stats.df)[1], " x ", dim(stats.df)[2], sep=""))
     StatscolNames <- names(stats.df)
   } else {
     stop(paste(geterrmessage(), str(warn_err)))
