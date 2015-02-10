@@ -340,23 +340,23 @@ isCountDesign <- function(count.df, design.df, format)
 	
 isStatsDesign <- function(stats.df, design.df)
 {
-	# Take the lib_names from stats data
-	statslibNames <- stats.df[,1]
-	# Take the lib_names from design data
-	designlibNames <- design.df[,1]
-	# Compare both stats and design lib names
-	if (identical(statslibNames, designlibNames)) {
-		debug(logger, "Stats and design data have the same lib names")
-		info(logger, "OK Stats and design data have the same lib names")
-		is_stats_design = TRUE
-		is_stats_design
-		} else
-		{
-		debug(logger, "Stats and design data don't have the same lib names")
-		info(logger, "Stats and design data don't have the same lib names")
-		is_stats_design = FALSE
-		is_stats_design
-		}	
+  # Take the lib_names from stats data
+  statslibNames <- stats.df[,1]
+  # Take the lib_names from design data
+  designlibNames <- design.df[,1]
+  # Compare both stats and design lib names
+  if (identical(statslibNames, designlibNames)) {
+    # 		debug(logger, "Stats and design data have the same lib names")
+    # 		info(logger, "OK Stats and design data have the same lib names")
+    is_stats_design = TRUE
+    is_stats_design
+  } else
+  {
+    # 		debug(logger, "Stats and design data don't have the same lib names")
+    # 		info(logger, "Stats and design data don't have the same lib names")
+    is_stats_design = FALSE
+    is_stats_design
+  }	
 }
 
 
