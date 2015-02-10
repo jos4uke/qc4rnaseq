@@ -284,16 +284,23 @@ isDesignDataFormat <- function(design.df)
 {
   DesigncolNames <- names(design.df)
   if (length(DesigncolNames) == 2) {
-    debug(logger, "Design input file has 2 columns as expected")
-	is_design_format = TRUE
-	is_design_format
+#     debug(logger, "Design input file has 2 columns as expected")
+    # test for void string
+    if (all(unlist(lapply(design.df[,2], function(x){length(x)>0})))) {
+      is_design_format = TRUE
+      is_design_format
+    } else
+    {
+      is_design_format = FALSE
+      is_design_format
+    }
   } else
   {
-	is_design_format = FALSE
-	is_design_format
-	error(logger, "Design input file doesn't have 2 columns as expected")
-	stop("Design input file doesn't have 2 columns as expected")
-   }
+    is_design_format = FALSE
+    is_design_format
+#     error(logger, "Design input file doesn't have 2 columns as expected")
+#     stop("Design input file doesn't have 2 columns as expected")
+  }
 }
 
 
