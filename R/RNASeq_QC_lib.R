@@ -151,29 +151,31 @@ isCountDataGeneric <- function(count.df)
   #debug(logger, "Count input file have less than 8 columns, count format seems to be generic")
   # check for generic format: at least 3 columns, 2 samples to compare
   if (length(colNames)>=3) {
-    debug(logger, "Count input file have at least 3 columns, a minimum of 2 samples to compare")
-    debug(logger, "Will check for generic count format: check that 2nd and 3rd columns values are numric vectors")
+#     debug(logger, "Count input file have at least 3 columns, a minimum of 2 samples to compare")
+#     debug(logger, "Will check for generic count format: check that 2nd and 3rd columns values are numric vectors")
     #if (all(count.df[,2] == floor(count.df[,2])) && all(count.df[,3] == floor(count.df[,3]))) {
-
+    
     #if (all(is.numeric(count.df[,2])) && all(is.numeric(count.df[,3]))) {
-	is_num <- c()
-	for (i in 2:length(colNames)) { is_num <- append(is.numeric(count.df[,i]), is_num)}
-	if (all(is_num)) {
-		is_generic_format = TRUE
-		debug(logger, "Generic format: 2nd and all following columns values are numeric vectors")
-		info(logger, "OK Count input file format is generic")
-		is_generic_format
+    is_num <- c()
+    for (i in 2:length(colNames)) { is_num <- append(is.numeric(count.df[,i]), is_num)}
+    if (all(is_num)) {
+      is_generic_format = TRUE
+#       debug(logger, "Generic format: 2nd and all following columns values are numeric vectors")
+#       info(logger, "OK Count input file format is generic")
+      is_generic_format
     } else {
       is_generic_format = FALSE
-      debug(logger, "Not a generic format: all or any of the 2nd and following columns values are not numeric vectors")
-      info(logger, "Count input file format is not generic")
+#       debug(logger, "Not a generic format: all or any of the 2nd and following columns values are not numeric vectors")
+#       info(logger, "Count input file format is not generic")
       is_generic_format
     }
     
   } else
   {
-    error(logger, "Count input file have less than 3 columns, need at least 2 samples to compare")
-    stop("Count input file have less than 3 columns, need at least 2 samples to compare")
+#     error(logger, "Count input file have less than 3 columns, need at least 2 samples to compare")
+#     stop("Count input file have less than 3 columns, need at least 2 samples to compare")
+    is_generic_format = FALSE
+    is_generic_format
   }
 }
   
