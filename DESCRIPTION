@@ -10,7 +10,6 @@ Maintainer: Joseph Tran <Joseph.Tran@versailles.inra.fr>
 Description: Estimate a posteriori the quality of RNA-seq libraries using count data
 Depends: R (>= 3.0.2)
 Imports:
-  log4r,
   knitr,
   markdown,
   rmarkdown,
