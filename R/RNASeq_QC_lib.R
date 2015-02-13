@@ -90,38 +90,26 @@ isCountDataBBRIC <- function(count.df)
     #debug(logger, "Will check for BBRIC count format: check -count and -rpkm name extension for 2 first columns pairs")
     # check for bbric format: check -count and -rpkm for odd and even columns pairs 
     is_count <- grepl("\\-count$", colNames[seq(9, length(colNames), by=2)])
-#     if (all(is_count)) { 
-#       debug(logger, "The odd columns pairs have -count columns") 
-#     } else
-#     {
-#       debug(logger, "Missing -count column in any of the odd columns pairs")
-#     }    
+    if (!all(is_count)) {
+      print("Missing -count column in any of the odd columns pairs", file=stderr())
+    }    
     is_rpkm <- grepl("\\-rpkm$", colNames[seq(10, length(colNames), by=2)])
-#     if (all(is_rpkm)) { 
-#       debug(logger, "The even columns pairs have -rpkm columns") 
-#     } else
-#     {
-#       debug(logger, "Missing -rpkm column in any of the even columns pairs")
-#     }
+    if (!all(is_rpkm)) { 
+      print("Missing -rpkm column in any of the even columns pairs", file=stderr())
+    }
     
     # check for bbric format: check -count and -rpkm columns have the same lib name
     is_idem <- gsub("-count", "", colNames[seq(9, length(colNames), by=2)]) == gsub("-rpkm", "", colNames[seq(10, length(colNames), by=2)])
-#     if (all(is_idem)) { 
-#       debug(logger, "The -count and -rpkm columns have the same lib name") 
-#     } else
-#     {
-#       debug(logger, "All the -count and -rpkm columns don't have the same lib name")
-#     }	  
+    if (!all(is_idem)) { 
+      print("All the -count and -rpkm columns don't have the same lib name", file=stderr())
+    }	  
     
     # check for bbric format: check -count and -rpkm columns contain only numeric values  
     is_num <- c()
     for (i in 9:length(colNames)) { is_num <- append(is.numeric(count.df[,i]), is_num)}
-#     if (all(is_num)) { 
-#       debug(logger, "-count and -rpkm columns contain only numeric values") 
-#     } else
-#     {
-#       debug(logger, "Values not numeric are found in the -count and -rpkm columns")
-#     }
+    if (!all(is_num)) { 
+      print("Values not numeric are found in the -count and -rpkm columns", file=stderr())
+    }
     
     if (all(is_count, is_rpkm, is_idem, is_num)) {
       is_bbric_format = TRUE
@@ -129,13 +117,13 @@ isCountDataBBRIC <- function(count.df)
       is_bbric_format
     } else
     {
+      print("Count input file format is not BBRIC", file=stderr())
       is_bbric_format = FALSE
-#       info(logger, "Count input file format is not BBRIC")
       is_bbric_format
     }
   } else
   {
-    #print("Count input file have less than 12 columns, need at least 2 samples to compare", file=stderr())
+    print("Count input file have less than 12 columns, need at least 2 samples to compare", file=stderr())
     #stop("Count input file have less than 12 columns, need at least 2 samples to compare")
     is_bbric_format = FALSE
     is_bbric_format
