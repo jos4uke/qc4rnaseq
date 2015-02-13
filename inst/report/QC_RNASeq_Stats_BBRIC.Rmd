@@ -1,0 +1,73 @@
+---
+title: "QC_RNASeq_BBRIC_stats"
+output: 
+  pdf_document:
+    toc: true
+    highlight: zenburn    
+---
+
+<!--- ajout d'un saut de page apres le toc --->
+\newpage
+
+```{r echo=FALSE}
+
+
+# treatment of stats file
+stats.df <- read.table(opt$stats, header=TRUE, sep="\t")
+
+# treatment of design file
+if (!is.null(opt$design)) {
+	design.df <- read.table(opt$design, header=TRUE, sep="\t")
+	Factor = design.df[,2]
+} 
+
+# dataframe for qplot (library ggplot2)
+if (!is.null(opt$design)) {
+datadf <- as.data.frame(cbind(stats.df, Factor))
+} else {
+datadf <- as.data.frame(stats.df)
+}
+
+
+```
+
+Barplot representing the number of raw reads per library
+=========================================================
+```{r echo=FALSE}
+if (!is.null(opt$design))  {
+qplot(data=datadf, x=lib, y=raw_reads.pairs_count, fill= Factor, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+} else {
+qplot(data=datadf, x=lib, y=raw_reads.pairs_count, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+}
+```
+
+Barplot representing the number of specific hits per library
+============================================================
+```{r echo=FALSE}
+if (!is.null(opt$design))  {
+qplot(data=datadf, x=lib, y=specific_hits, fill= Factor, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+} else {
+qplot(data=datadf, x=lib, y=specific_hits, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+}
+```
+
+Barplot representing the percentage of mapped_reads / raw_reads (per library)
+============================================================================
+```{r echo=FALSE}
+if (!is.null(opt$design))  {
+qplot(data=datadf, x=lib, y=100 * mapped_reads.pairs_count/raw_reads.pairs_count, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
+} else {
+qplot(data=datadf, x=lib, y=100 * mapped_reads.pairs_count/raw_reads.pairs_count, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
+}
+```
+
+Barplot representing the percentage of number of feature_overlapping_hits / specific_hits (per library)
+=====================================================================================================
+
+```{r echo=FALSE}
+if (!is.null(opt$design))  {
+qplot(data=datadf, x=lib, y=feature_overlapping_hits.specific_hits_percent, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of feature_overlapping_hits / specific_hits")
+} else {
+qplot(data=datadf, x=lib, y=feature_overlapping_hits.specific_hits_percent,  geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of feature_overlapping_hits / specific_hits")
+}
+```

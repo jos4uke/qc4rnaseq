@@ -1,0 +1,16 @@
+lib	Strain
+Mutant1_M2	Mutant1
+Mutant1_M3	Mutant1
+Mutant1_M4	Mutant1
+Mutant2_M1	Mutant2
+Mutant2_M2	Mutant2
+Mutant2_M3	Mutant2
+Mutant2_M4	Mutant2
+Mutant3_M3	Mutant3
+Mutant3_M4	Mutant3
+Mutant3_M1	Mutant3
+Mutant3_M2	Mutant3
+WT_M1	WT
+WT_M2	WT
+WT_M3	WT
+WT_M4	WT
