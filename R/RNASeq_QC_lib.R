@@ -91,24 +91,24 @@ isCountDataBBRIC <- function(count.df)
     # check for bbric format: check -count and -rpkm for odd and even columns pairs 
     is_count <- grepl("\\-count$", colNames[seq(9, length(colNames), by=2)])
     if (!all(is_count)) {
-      print("Missing -count column in any of the odd columns pairs", file=stderr())
+      warning("Missing -count column in any of the odd columns pairs", file=stderr())
     }    
     is_rpkm <- grepl("\\-rpkm$", colNames[seq(10, length(colNames), by=2)])
     if (!all(is_rpkm)) { 
-      print("Missing -rpkm column in any of the even columns pairs", file=stderr())
+      warning("Missing -rpkm column in any of the even columns pairs", file=stderr())
     }
     
     # check for bbric format: check -count and -rpkm columns have the same lib name
     is_idem <- gsub("-count", "", colNames[seq(9, length(colNames), by=2)]) == gsub("-rpkm", "", colNames[seq(10, length(colNames), by=2)])
     if (!all(is_idem)) { 
-      print("All the -count and -rpkm columns don't have the same lib name", file=stderr())
+      warning("All the -count and -rpkm columns don't have the same lib name", file=stderr())
     }    
     
     # check for bbric format: check -count and -rpkm columns contain only numeric values  
     is_num <- c()
     for (i in 9:length(colNames)) { is_num <- append(is.numeric(count.df[,i]), is_num)}
     if (!all(is_num)) { 
-      print("Values not numeric are found in the -count and -rpkm columns", file=stderr())
+      warning("Values not numeric are found in the -count and -rpkm columns", file=stderr())
     }
     
     if (all(is_count, is_rpkm, is_idem, is_num)) {
@@ -123,7 +123,7 @@ isCountDataBBRIC <- function(count.df)
     }
   } else
   {
-    print("Count input file have less than 12 columns, need at least 2 samples to compare", file=stderr())
+    warning("Count input file have less than 12 columns, need at least 2 samples to compare", file=stderr())
     #stop("Count input file have less than 12 columns, need at least 2 samples to compare")
     is_bbric_format = FALSE
     is_bbric_format
@@ -150,14 +150,14 @@ isCountDataGeneric <- function(count.df)
       #       info(logger, "OK Count input file format is generic")
       is_generic_format
     } else {
-      print ("Not a generic format: all or any of the 2nd and following columns values are not numeric vectors")
+      warning ("Not a generic format: all or any of the 2nd and following columns values are not numeric vectors")
       is_generic_format = FALSE
       is_generic_format
     }
     
   } else
   {
-    print ("Count input file have less than 3 columns, need at least 2 samples to compare")
+    warning ("Count input file have less than 3 columns, need at least 2 samples to compare")
     is_generic_format = FALSE
     is_generic_format
   }
@@ -227,12 +227,12 @@ isStatsDataFormat <- function(stats.df)
       is_stats_format
     } else
     {
-      print("Stats input file doesnt' have the expected column names")
+      warning("Stats input file doesnt' have the expected column names")
       is_stats_format = FALSE
       is_stats_format
     }
   } else {
-    print ("Stats input file doesn't have 7 columns as expected")
+    warning ("Stats input file doesn't have 7 columns as expected")
     is_stats_format = FALSE
     is_stats_format
   }
@@ -273,13 +273,13 @@ isDesignDataFormat <- function(design.df)
       is_design_format
     } else
     {
-      print ("The design input file has empty modalities")
+      warning ("The design input file has empty modalities")
       is_design_format = FALSE
       is_design_format
     }
   } else
   {
-    print ("Design input file doesn't have 2 columns as expected")
+    warning ("Design input file doesn't have 2 columns as expected")
     is_design_format = FALSE
     is_design_format
   }
@@ -309,7 +309,7 @@ isCountDesign <- function(count.df, design.df, format)
     is_count_design
   } else
   {
-    print ("Count and design data don't have the same lib names")
+    warning ("Count and design data don't have the same lib names")
     is_count_design = FALSE
     is_count_design
   }
@@ -333,7 +333,7 @@ isStatsDesign <- function(stats.df, design.df)
     is_stats_design
   } else
   {
-    print ("Stats and design data don't have the same lib names")
+    warning ("Stats and design data don't have the same lib names")
     is_stats_design = FALSE
     is_stats_design
   }	
