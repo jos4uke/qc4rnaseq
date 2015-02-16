@@ -57,12 +57,6 @@ if (!is.null(opt$design)) {
 plot(dendCol, main= "Cluster Dendrogram (log values)")
 ```
 
-PCA (Principal component analysis) of the libraries (log values)
-===================================================================
-```{r echo=FALSE}
-acpnnlog = PCA(t(logvalues), scale.unit=FALSE, graph= FALSE)
-plot(acpnnlog, axes=c(1,2), choix=c("ind"))
-```
 
 Barplot representing for each library the number of features (genes / RNA) that have at least 10 reads mapped
 ==============================================================================================================

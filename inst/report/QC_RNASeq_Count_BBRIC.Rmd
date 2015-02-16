@@ -25,7 +25,7 @@ logrpkmvalues <- log(rpkmvalues + 1)
 
 # treatment of design file
 if (!is.null(opt$design)) {
-	design.df <- read.table(opt$design, header=TRUE, sep="\t")
+	design.df <- read.table(opt$design, header=TRUE, sep="\t", check.names=FALSE)
 	lib_names <- design.df[,1]
 	Factor = design.df[,2]
 	moda_names = unique (Factor)
@@ -71,20 +71,6 @@ if (!is.null(opt$design)) {
 	labels_colors(dendCol) <- colorModa[Factor][order.dendrogram(dendCol)]
 }
 plot(dendCol, main= "Cluster Dendrogram (log rpkm values)")
-```
-
-PCA (Principal component analysis) of the libraries (log raw values)
-===================================================================
-```{r echo=FALSE}
-acpnnlog = PCA(t(lograwvalues), scale.unit=FALSE, graph= FALSE)
-plot(acpnnlog, axes=c(1,2), choix=c("ind"), title = "Individuals factor map (PCA) (log raw values)")
-```
-
-PCA (Principal component analysis) of the libraries (log rpkm values)
-=====================================================================
-```{r echo=FALSE}
-acpnnlog = PCA(t(logrpkmvalues), scale.unit=FALSE, graph= FALSE)
-plot(acpnnlog, axes=c(1,2), choix=c("ind"), title = "Individuals factor map (PCA) (log rpkm values)")
 ```
 
 Barplot representing for each library the number of features (genes / RNA) that have at least 10 reads mapped
