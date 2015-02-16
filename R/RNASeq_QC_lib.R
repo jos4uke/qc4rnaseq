@@ -95,20 +95,20 @@ isCountDataBBRIC <- function(count.df)
     }    
     is_rpkm <- grepl("\\-rpkm$", colNames[seq(10, length(colNames), by=2)])
     if (!all(is_rpkm)) { 
-      warning("Missing -rpkm column in any of the even columns pairs", file=stderr())
+      warning("Missing -rpkm column in any of the even columns pairs")
     }
     
     # check for bbric format: check -count and -rpkm columns have the same lib name
     is_idem <- gsub("-count", "", colNames[seq(9, length(colNames), by=2)]) == gsub("-rpkm", "", colNames[seq(10, length(colNames), by=2)])
     if (!all(is_idem) && all(is_rpkm, is_count)) { 
-      warning("All the -count and -rpkm columns don't have the same lib name", file=stderr())
+      warning("All the -count and -rpkm columns don't have the same lib name")
     }    
     
     # check for bbric format: check -count and -rpkm columns contain only numeric values  
     is_num <- c()
     for (i in 9:length(colNames)) { is_num <- append(is.numeric(count.df[,i]), is_num)}
     if (!all(is_num)) { 
-      warning("Values not numeric are found in the -count and -rpkm columns", file=stderr())
+      warning("Values not numeric are found in the -count and -rpkm columns")
     }
     
     if (all(is_count, is_rpkm, is_idem, is_num)) {
@@ -123,7 +123,7 @@ isCountDataBBRIC <- function(count.df)
     }
   } else
   {
-    warning("Count input file have less than 12 columns, need at least 2 samples to compare", file=stderr())
+    warning("Count input file have less than 12 columns, need at least 2 samples to compare")
     #stop("Count input file have less than 12 columns, need at least 2 samples to compare")
     is_bbric_format = FALSE
     is_bbric_format
