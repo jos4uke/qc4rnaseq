@@ -13,13 +13,13 @@ output:
 
 
 # treatment of count BBRIC file
-bbric.df <- read.table(opt$count, header = TRUE, sep="\t")
+bbric.df <- read.table(opt$count, header = TRUE, sep="\t", check.names=FALSE)
 nbcoltotal=dim(bbric.df)[2]
 nblib=(nbcoltotal - 8)/2
 rawvalues = bbric.df[, seq(9, nbcoltotal, by=2)]
-colnames(rawvalues) = gsub("-count", "", colnames(rawvalues)) 
+colnames(rawvalues) = gsub(".count", "", colnames(rawvalues)) 
 rpkmvalues = bbric.df[, seq(10, nbcoltotal, by=2)]
-colnames(rpkmvalues) = gsub("-rpkm", "", colnames(rpkmvalues)) 
+colnames(rpkmvalues) = gsub(".rpkm", "", colnames(rpkmvalues)) 
 lograwvalues <- log(rawvalues + 1)
 logrpkmvalues <- log(rpkmvalues + 1)
 
