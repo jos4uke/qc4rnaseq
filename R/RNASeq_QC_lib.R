@@ -100,7 +100,7 @@ isCountDataBBRIC <- function(count.df)
     
     # check for bbric format: check -count and -rpkm columns have the same lib name
     is_idem <- gsub("-count", "", colNames[seq(9, length(colNames), by=2)]) == gsub("-rpkm", "", colNames[seq(10, length(colNames), by=2)])
-    if (!all(is_idem)) { 
+    if (!all(is_idem) && all(is_rpkm, is_count)) { 
       warning("All the -count and -rpkm columns don't have the same lib name", file=stderr())
     }    
     
