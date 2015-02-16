@@ -91,7 +91,7 @@ isCountDataBBRIC <- function(count.df)
     # check for bbric format: check -count and -rpkm for odd and even columns pairs 
     is_count <- grepl("\\-count$", colNames[seq(9, length(colNames), by=2)])
     if (!all(is_count)) {
-      warning("Missing -count column in any of the odd columns pairs", file=stderr())
+      warning("Missing -count column in any of the odd columns pairs")
     }    
     is_rpkm <- grepl("\\-rpkm$", colNames[seq(10, length(colNames), by=2)])
     if (!all(is_rpkm)) { 
