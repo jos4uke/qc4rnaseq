@@ -35,9 +35,9 @@ Barplot representing the number of raw reads per library
 =========================================================
 ```{r echo=FALSE}
 if (!is.null(opt$design))  {
-qplot(data=datadf, x=lib, y=raw_reads.pairs_count, fill= Factor, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+qplot(data=datadf, x=lib, y=raw_reads/pairs_count, fill= Factor, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 } else {
-qplot(data=datadf, x=lib, y=raw_reads.pairs_count, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+qplot(data=datadf, x=lib, y=raw_reads/pairs_count, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 }
 ```
 
@@ -55,9 +55,9 @@ Barplot representing the percentage of mapped_reads / raw_reads (per library)
 ============================================================================
 ```{r echo=FALSE}
 if (!is.null(opt$design))  {
-qplot(data=datadf, x=lib, y=100 * mapped_reads.pairs_count/raw_reads.pairs_count, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
+qplot(data=datadf, x=lib, y=100 * mapped_reads/pairs_count/raw_reads/pairs_count, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
 } else {
-qplot(data=datadf, x=lib, y=100 * mapped_reads.pairs_count/raw_reads.pairs_count, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
+qplot(data=datadf, x=lib, y=100 * mapped_reads/pairs_count/raw_reads/pairs_count, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
 }
 ```
 
@@ -66,8 +66,8 @@ Barplot representing the percentage of number of feature_overlapping_hits / spec
 
 ```{r echo=FALSE}
 if (!is.null(opt$design))  {
-qplot(data=datadf, x=lib, y=feature_overlapping_hits.specific_hits_percent, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of feature_overlapping_hits / specific_hits")
+qplot(data=datadf, x=lib, y=feature_overlapping_hits/specific_hits_percent, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of feature_overlapping_hits / specific_hits")
 } else {
-qplot(data=datadf, x=lib, y=feature_overlapping_hits.specific_hits_percent,  geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of feature_overlapping_hits / specific_hits")
+qplot(data=datadf, x=lib, y=feature_overlapping_hits/specific_hits_percent,  geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of feature_overlapping_hits / specific_hits")
 }
 ```
