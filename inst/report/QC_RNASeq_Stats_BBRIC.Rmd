@@ -13,11 +13,11 @@ output:
 
 
 # treatment of stats file
-stats.df <- read.table(opt$stats, header=TRUE, sep="\t")
+stats.df <- read.table(opt$stats, header=TRUE, sep="\t", check.names=FALSE)
 
 # treatment of design file
 if (!is.null(opt$design)) {
-	design.df <- read.table(opt$design, header=TRUE, sep="\t")
+	design.df <- read.table(opt$design, header=TRUE, sep="\t", check.names=FALSE)
 	Factor = design.df[,2]
 } 
 
