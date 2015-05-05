@@ -21,6 +21,8 @@ if (!is.null(opt$design)) {
 	Factor = design.df[,2]
 } 
 
+
+
 # dataframe for qplot (library ggplot2)
 if (!is.null(opt$design)) {
 datadf <- as.data.frame(cbind(stats.df, Factor))
@@ -33,26 +35,39 @@ datadf <- as.data.frame(stats.df)
 
 Barplot representing the number of raw reads per library
 =========================================================
+This barplot displays the size of each library (number of raw reads)
+
+Expected results :
+
+-	All the libraries should have at least the number of reads warranted by the NGS provider
+
+-	The number of reads can be heterogeneous among libraries, due to experimental steps (library preparation, PCR, sequencing ...)
+
+
 ```{r echo=FALSE}
 if (!is.null(opt$design))  {
 qplot(data=datadf, x=lib, y=raw_reads.pairs_count, fill= Factor, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
 } else {
 qplot(data=datadf, x=lib, y=raw_reads.pairs_count, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 }
 ```
-
-Barplot representing the number of specific hits per library
-============================================================
-```{r echo=FALSE}
-if (!is.null(opt$design))  {
-qplot(data=datadf, x=lib, y=specific_hits, fill= Factor, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
-} else {
-qplot(data=datadf, x=lib, y=specific_hits, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
-}
-```
+\newpage
 
 Barplot representing the percentage of mapped_reads / raw_reads (per library)
 ============================================================================
+This barplot displays the % of reads that map on the genome.
+
+Expected results :
+
+-	All the libraries should have quite the same % of reads that map on the genome
+
+Application :
+
+-	Detect contamination problems (by other organisms)
+
+-	Check that the mapping parameters are adequate for all the samples (including the samples that do not come from the reference genome used for the mapping)
+
 ```{r echo=FALSE}
 if (!is.null(opt$design))  {
 qplot(data=datadf, x=lib, y=100 * mapped_reads.pairs_count/raw_reads.pairs_count, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
@@ -60,9 +75,44 @@ qplot(data=datadf, x=lib, y=100 * mapped_reads.pairs_count/raw_reads.pairs_count
 qplot(data=datadf, x=lib, y=100 * mapped_reads.pairs_count/raw_reads.pairs_count, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
 }
 ```
+\newpage
 
-Barplot representing the percentage of number of feature_overlapping_hits / specific_hits (per library)
+Barplot representing the percentage of specific hits / mapping_hits (per library)
+================================================================================
+This barplot displays the % of hits that are specific (mapping only once on the genome) among the total number of hits that map on the genome.
+
+Expected results :
+
+-	All the libraries should have quite the same % of specific hits
+
+Application :
+
+-	Check that the mapping parameters are adequate to ensure specific hits
+
+-	Detect contamination problems (for example by ribosomal RNA)
+
+```{r echo=FALSE}
+if (!is.null(opt$design))  {
+qplot(data=datadf, x=lib, y=100 * specific_hits/mapping_hits, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+} else {
+qplot(data=datadf, x=lib, y=100 * specific_hits/mapping_hits, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+}
+```
+\newpage
+
+Barplot representing the percentage of feature_overlapping_hits / specific_hits (per library)
 =====================================================================================================
+This barplot displays the % of specific hits that overlap with a feature (gene/RNA).
+
+Expected results :
+
+-	All the libraries should have quite the same % of hits that overlap a feature
+
+Application :
+
+-	Check the structural annotation
+
+-	Check that paired libraries are used in the correct orientation
 
 ```{r echo=FALSE}
 if (!is.null(opt$design))  {
