@@ -112,7 +112,7 @@ Application :
 
 -	Check the structural annotation
 
--	Check that paired libraries are used in the correct orientation
+-	Check that pair-end libraries are used in the correct orientation
 
 ```{r echo=FALSE}
 if (!is.null(opt$design))  {
