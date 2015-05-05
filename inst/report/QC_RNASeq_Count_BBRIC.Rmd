@@ -11,7 +11,6 @@ output:
 
 ```{r echo=FALSE}
 
-
 # treatment of count BBRIC file
 bbric.df <- read.table(opt$count, header = TRUE, sep="\t", check.names=FALSE)
 nbcoltotal=dim(bbric.df)[2]
