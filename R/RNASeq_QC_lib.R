@@ -91,24 +91,24 @@ isCountDataBBRIC <- function(count.df)
     # check for bbric format: check -count and -rpkm for odd and even columns pairs 
     is_count <- grepl("\\-count$", colNames[seq(9, length(colNames), by=2)])
     if (!all(is_count)) {
-      warning("Missing -count column in any of the odd columns pairs")
+      warning("Missing -count column in any of the expected -count columns (odd columns from 9 to end)")
     }    
     is_rpkm <- grepl("\\-rpkm$", colNames[seq(10, length(colNames), by=2)])
     if (!all(is_rpkm)) { 
-      warning("Missing -rpkm column in any of the even columns pairs")
+      warning("Missing -rpkm column in any of the expected -rpkm columns (even columns from 10 to end)")
     }
     
     # check for bbric format: check -count and -rpkm columns have the same lib name
     is_idem <- gsub("-count", "", colNames[seq(9, length(colNames), by=2)]) == gsub("-rpkm", "", colNames[seq(10, length(colNames), by=2)])
     if (!all(is_idem) && all(is_rpkm, is_count)) { 
-      warning("All the -count and -rpkm columns don't have the same lib name")
+      warning("All the expected -count and -rpkm columns don't have the same lib name (respectively odd columns from 9 to end, and even columns from 10 to end)")
     }    
     
     # check for bbric format: check -count and -rpkm columns contain only numeric values  
     is_num <- c()
     for (i in 9:length(colNames)) { is_num <- append(is.numeric(count.df[,i]), is_num)}
     if (!all(is_num)) { 
-      warning("Values not numeric are found in the -count and -rpkm columns")
+      warning("Values not numeric are found in the expected -count and -rpkm columns (columns from 9 to end)")
     }
     
     if (all(is_count, is_rpkm, is_idem, is_num)) {

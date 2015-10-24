@@ -46,6 +46,24 @@ if (!is.null(opt$design)) {
 
 Cluster dendrogram representing the hierarchical clustering of libraries (log values)
 ==========================================================================================
+Input Data = RNASeq count expression file.
+
+After a log transformation and a Pearson correlation, data are submitted to an Ascending Hierarchical Clustering (AHC) (Ward).
+
+The aim of AHC is to cluster the libraries, based on their count values.
+
+Expected results :
+
+-	All the replicates for an experimental condition should cluster together
+
+-	The different experimental conditions should be well separated
+
+Application :
+
+-	Estimate the distance between the different libraries
+
+-	Detect problems of sample inversion
+
 ```{r echo=FALSE}
 dist.lame.cor <- 1 - cor(logvalues, use="pairwise.complete.obs")
 hc.lame.cor <- hclust(as.dist(dist.lame.cor))
@@ -56,10 +74,27 @@ if (!is.null(opt$design)) {
 }
 plot(dendCol, main= "Cluster Dendrogram (log values)")
 ```
-
+\newpage
 
 Barplot representing for each library the number of features (genes / RNA) that have at least 10 reads mapped
 ==============================================================================================================
+For each library, the number of genes that have at least 10 reads mapped, is displayed.
+
+The number of 10 is empirical, and was chosen because we think that it is the minimal number required to consider that a feature is expressed.
+
+Expected results :
+
+-	All the libraries should have quite the same number of genes with >= 10 reads mapped
+
+Application :
+
+-	Estimate the number of genes usable / library
+
+-	Estimate the number of valid genes (Number of features with at least 10 reads mapped, in at least 1 lib)
+
+-	Check that the mapping parameters and structural annotation file are adequate for all the libraries (including samples that do not come from the reference genome)
+
+
 ```{r echo=FALSE}
 vecteursup10 = c()
 vecteurunionprov = c()
@@ -81,18 +116,34 @@ names(todisplay) = c('lib', 'nb features with at least 10 reads', 'nb features t
 todisplay[,1:3]
 
  ```
+ \newpage
  
  Box-plot (log values)
 =========================
+Input Data = RNASeq count expression file.
+
+For each library, box-plots of log (count values) are displayed.
+
+Expected results :
+
+-	All the libraries should have quite the same distribution
+
+Application :
+
+-	Ensure that all the libraries have quite the same distribution to initiate a powerful differential expression analysis
+
+-	Check that an unexpected clustering in the AHC (first graph) is not caused by a heterogeneous distribution between libraries
+
 ```{r echo=FALSE}
 if (!is.null(opt$design)) {
 	boxplot(logvalues, cex.axis=0.7, las=2, main="BoxPlot of log(count)", col=colorLib)
 } else {
 	boxplot(logvalues, cex.axis=0.7, las=2, main="BoxPlot of log(count)")
 }
- ```
- 
- Summary of values
+```
+\newpage
+
+Summary of values
 ============================
 
 ```{r echo=FALSE}
