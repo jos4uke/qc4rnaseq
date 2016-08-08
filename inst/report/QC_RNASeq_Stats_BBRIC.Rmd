@@ -46,10 +46,11 @@ Expected results :
 
 ```{r echo=FALSE}
 if (!is.null(opt$design))  {
-qplot(data=datadf, x=lib, y=raw_reads.pairs_count, fill= Factor, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
-
+#qplot(data=datadf, x=lib, y=raw_reads.pairs_count, fill= Factor, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(data=datadf, aes(x=lib, y=raw_reads.pairs_count)) + geom_bar(stat="identity", aes(fill=Factor)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 } else {
-qplot(data=datadf, x=lib, y=raw_reads.pairs_count, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+#qplot(data=datadf, x=lib, y=raw_reads.pairs_count, geom="bar", stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(data=datadf, aes(x=lib, y=raw_reads.pairs_count)) + geom_bar(stat="identity")  + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 }
 ```
 \newpage
@@ -70,9 +71,11 @@ Application :
 
 ```{r echo=FALSE}
 if (!is.null(opt$design))  {
-qplot(data=datadf, x=lib, y=100 * mapped_reads.pairs_count/raw_reads.pairs_count, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
+#qplot(data=datadf, x=lib, y=100 * mapped_reads.pairs_count/raw_reads.pairs_count, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
+ggplot(data=datadf, aes(x=lib, y=100 * mapped_reads.pairs_count/raw_reads.pairs_count)) + geom_bar(stat="identity", aes(fill=Factor)) + ylim(0,100) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
 } else {
-qplot(data=datadf, x=lib, y=100 * mapped_reads.pairs_count/raw_reads.pairs_count, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
+#qplot(data=datadf, x=lib, y=100 * mapped_reads.pairs_count/raw_reads.pairs_count, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
+ggplot(data=datadf, aes(x=lib, y=100 * mapped_reads.pairs_count/raw_reads.pairs_count)) + geom_bar(stat="identity") + ylim(0,100) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of mapped_reads / raw_reads")
 }
 ```
 \newpage
@@ -93,9 +96,11 @@ Application :
 
 ```{r echo=FALSE}
 if (!is.null(opt$design))  {
-qplot(data=datadf, x=lib, y=100 * specific_hits/mapping_hits, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+#qplot(data=datadf, x=lib, y=100 * specific_hits/mapping_hits, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(data=datadf, aes(x=lib, y=100 * specific_hits/mapping_hits)) + geom_bar(stat="identity", aes(fill=Factor)) + ylim(0,100) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 } else {
-qplot(data=datadf, x=lib, y=100 * specific_hits/mapping_hits, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+#qplot(data=datadf, x=lib, y=100 * specific_hits/mapping_hits, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(data=datadf, aes(x=lib, y=100 * specific_hits/mapping_hits)) + geom_bar(stat="identity") + ylim(0,100) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 }
 ```
 \newpage
@@ -116,8 +121,10 @@ Application :
 
 ```{r echo=FALSE}
 if (!is.null(opt$design))  {
-qplot(data=datadf, x=lib, y=feature_overlapping_hits.specific_hits_percent, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of feature_overlapping_hits / specific_hits")
+#qplot(data=datadf, x=lib, y=feature_overlapping_hits.specific_hits_percent, fill= Factor, geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of feature_overlapping_hits / specific_hits")
+ggplot(data=datadf, aes(x=lib, y=feature_overlapping_hits.specific_hits_percent)) + geom_bar(stat="identity", aes(fill=Factor)) + ylim(0,100) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of feature_overlapping_hits / specific_hits")
 } else {
-qplot(data=datadf, x=lib, y=feature_overlapping_hits.specific_hits_percent,  geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of feature_overlapping_hits / specific_hits")
+#qplot(data=datadf, x=lib, y=feature_overlapping_hits.specific_hits_percent,  geom="bar", stat="identity", ylim=c(0, 100)) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of feature_overlapping_hits / specific_hits")
+ggplot(data=datadf, aes(x=lib, y=feature_overlapping_hits.specific_hits_percent)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("% of feature_overlapping_hits / specific_hits")
 }
 ```
