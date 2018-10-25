@@ -13,7 +13,8 @@ output:
 
 
 # treatment of stats file
-stats.df <- read.table(opt$stats, header=TRUE, sep="\t")
+stats <- paste(opt$stats_dir, basename(opt$stats), sep = .Platform$file.sep)
+stats.df <- read.table(stats, header=TRUE, sep="\t")
 
 # treatment of design file
 if (!is.null(opt$design)) {
@@ -25,9 +26,9 @@ if (!is.null(opt$design)) {
 
 # dataframe for qplot (library ggplot2)
 if (!is.null(opt$design)) {
-datadf <- as.data.frame(cbind(stats.df, Factor))
+  datadf <- as.data.frame(cbind(stats.df, Factor))
 } else {
-datadf <- as.data.frame(stats.df)
+  datadf <- as.data.frame(stats.df)
 }
 
 
