@@ -12,7 +12,8 @@ output:
 ```{r echo=FALSE}
 
 # treatment of count BBRIC file
-bbric.df <- read.table(opt$count, header = TRUE, sep="\t", check.names=FALSE)
+count <- paste(opt$count_dir, basename(opt$count), sep = .Platform$file.sep)
+bbric.df <- read.table(count, header = TRUE, sep="\t", check.names=FALSE)
 nbcoltotal=dim(bbric.df)[2]
 nblib=(nbcoltotal - 8)/2
 rawvalues = bbric.df[, seq(9, nbcoltotal, by=2)]
@@ -24,7 +25,8 @@ logrpkmvalues <- log(rpkmvalues + 1)
 
 # treatment of design file
 if (!is.null(opt$design)) {
-	design.df <- read.table(opt$design, header=TRUE, sep="\t", check.names=FALSE)
+  design <- paste(opt$design_dir, basename(opt$design), sep = .Platform$file.sep)
+	design.df <- read.table(design, header=TRUE, sep="\t", check.names=FALSE)
 	lib_names <- design.df[,1]
 	Factor = design.df[,2]
 	moda_names = unique (Factor)

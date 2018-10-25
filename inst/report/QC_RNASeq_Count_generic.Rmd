@@ -14,7 +14,8 @@ output:
 
 
 # treatment of generic file
-generic.df <- read.table(opt$count, header = TRUE, sep="\t", check.names=FALSE)
+count <- paste(opt$count_dir, basename(opt$count), sep = .Platform$file.sep)
+generic.df <- read.table(count, header = TRUE, sep="\t", check.names=FALSE)
 nbcol=dim(generic.df)[2]
 nblib=nbcol - 1
 values <- generic.df[,2:nbcol]
@@ -22,7 +23,8 @@ logvalues <- log(generic.df[,2:nbcol] + 1)
 
 # treatment of design file
 if (!is.null(opt$design)) {
-	design.df <- read.table(opt$design, header=TRUE, sep="\t", check.names=FALSE)
+  design <- paste(opt$design_dir, basename(opt$design), sep = .Platform$file.sep)
+	design.df <- read.table(design, header=TRUE, sep="\t", check.names=FALSE)
 	lib_names <- design.df[,1]
 	Factor = design.df[,2]
 	moda_names = unique (Factor)
