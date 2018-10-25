@@ -117,7 +117,7 @@ isCountDataBBRIC <- function(count.df)
       is_bbric_format
     } else
     {
-      print("Count input file format is not BBRIC", file=stderr())
+      info("Count input file format is not BBRIC")
       is_bbric_format = FALSE
       is_bbric_format
     }
