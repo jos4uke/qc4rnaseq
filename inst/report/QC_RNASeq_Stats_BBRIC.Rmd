@@ -11,15 +11,15 @@ output:
 
 ```{r echo=FALSE}
 
-
 # treatment of stats file
 stats <- paste(opt$stats_dir, basename(opt$stats), sep = .Platform$file.sep)
 stats.df <- read.table(stats, header=TRUE, sep="\t")
 
 # treatment of design file
 if (!is.null(opt$design)) {
-	design.df <- read.table(opt$design, header=TRUE, sep="\t")
-	Factor = design.df[,2]
+  design <- paste(opt$design_dir, basename(opt$design), sep = .Platform$file.sep)
+  design.df <- read.table(design, header=TRUE, sep="\t")
+  Factor = design.df[,2]
 } 
 
 
